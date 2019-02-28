@@ -1,7 +1,7 @@
 package bunchTool
 
 import java.io.File
-import java.io.FileNotFoundException
+import kotlin.system.exitProcess
 
 class BunchTool {
     companion object {
@@ -9,17 +9,19 @@ class BunchTool {
         fun main(args: Array<String>) {
             if (args.size != 1) {
                 println("Incorrect args!")
-                return
+                exitProcess(1)
+
             }
-            try {
-                File(args[0]).walk().forEach {
+            val directory = File(args[0])
+            if (directory.exists())
+                directory.walk().forEach {
                     if (it.isFile && it.extension in arrayOf("java", "kt")) {
-                        println("${it.extension} ${it.name} ${it.absolutePath}")
                         it.renameTo(File(it.absolutePath + ".2019"))
                     }
                 }
-            } catch (e: FileNotFoundException) {
-                println(e.localizedMessage)
+            else {
+                println("Directory not exists!")
+                exitProcess(2)
             }
         }
     }
