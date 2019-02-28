@@ -17,6 +17,7 @@ class BunchTool {
                 directory.walk().forEach {
                     if (it.isFile && it.extension in arrayOf("java", "kt")) {
                         it.renameTo(File(it.absolutePath + ".2019"))
+                        println(it.absolutePath)
                     }
                 }
             else {
