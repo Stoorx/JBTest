@@ -10,20 +10,24 @@ class BunchTool {
             if (args.size != 1) {
                 println("Incorrect args!")
                 exitProcess(1)
-
             }
-            val directory = File(args[0])
-            if (directory.exists())
-                directory.walk().forEach {
-                    if (it.isFile && it.extension in arrayOf("java", "kt")) {
+            val directory = File(args[0]).takeIf { it.exists() }
+            if (directory === null) {
+                println("Directory not exists.")
+                exitProcess(2)
+            }
+            if(directory.isFile){
+                println("File passed. Expected directory.")
+                exitProcess(3)
+            }
+
+            directory.walk()
+                    .filter { it.isFile && it.extension in arrayOf("java", "kt") }
+                    .forEach {
                         it.renameTo(File(it.absolutePath + ".2019"))
                         println(it.absolutePath)
                     }
-                }
-            else {
-                println("Directory not exists!")
-                exitProcess(2)
-            }
+
         }
     }
 }
